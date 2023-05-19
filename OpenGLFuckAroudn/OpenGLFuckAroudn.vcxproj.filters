@@ -18,13 +18,22 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helloTriangle.cpp">
+    <ClCompile Include="src\gettingStarted\helloEBO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helloEBO.cpp">
+    <ClCompile Include="src\gettingStarted\helloTriangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helloExercises.cpp">
+    <ClCompile Include="src\gettingStarted\helloTriangle_exercise_1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gettingStarted\helloTriangle_exercise_2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gettingStarted\helloTriangle_exercise_3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderGettingStarted.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
