@@ -1,27 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-" gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-
-const char* fragmentShaderSourceYellow = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
-
-const char* fragmentShaderSourceBlue = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"FragColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);\n"
-"}\0";
+#include "headers/ShaderBuilder.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -66,49 +46,21 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// create and compile shaders
+	const char* shaderPath = "C:/Users/infia/source/repos/OpenGLFuckAroudn/OpenGLFuckAroudn/src/gettingStarted/shaders";
+	char vertexShaderPath[256];
+	strcpy_s(vertexShaderPath, shaderPath);
+	strcat_s(vertexShaderPath, "/helloTriangle.vert");
 
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	char yellowFragmentShaderPath[256];
+	strcpy_s(yellowFragmentShaderPath, shaderPath);
+	strcat_s(yellowFragmentShaderPath, "/helloTriangle.frag");
 
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	char blueFragmentShaderPath[256];
+	strcpy_s(blueFragmentShaderPath, shaderPath);
+	strcat_s(blueFragmentShaderPath, "/helloTriangleBlue.frag");
 
-	unsigned int yellowFragmentShader;
-	yellowFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(yellowFragmentShader, 1, &fragmentShaderSourceYellow, NULL);
-	glCompileShader(yellowFragmentShader);
-
-	unsigned int blueFragmentShader;
-	blueFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(blueFragmentShader, 1, &fragmentShaderSourceBlue, NULL);
-	glCompileShader(blueFragmentShader);
-
-	// create and link shader programs
-
-	unsigned int yellowProgram, blueProgram;
-
-	yellowProgram = glCreateProgram();
-
-	glAttachShader(yellowProgram, vertexShader);
-	glAttachShader(yellowProgram, yellowFragmentShader);
-	glLinkProgram(yellowProgram);
-
-
-	blueProgram = glCreateProgram();
-
-	glAttachShader(blueProgram, vertexShader);
-	glAttachShader(blueProgram, blueFragmentShader);
-	glLinkProgram(blueProgram);
-
-	// delete shaders after use in linking
-	glDeleteShader(vertexShader);
-	glDeleteShader(blueFragmentShader);
-	glDeleteShader(yellowFragmentShader);
-
-
-
+	Shader yellowShader = Shader(vertexShaderPath, yellowFragmentShaderPath);
+	Shader blueShader = Shader(vertexShaderPath, blueFragmentShaderPath);
 	// ---triangles---
 
 	float verticesFirstTriangle[]
@@ -161,12 +113,12 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(yellowProgram);
+		yellowShader.use();
 
 		glBindVertexArray(firstVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		glUseProgram(blueProgram);
+		blueShader.use();
 
 		glBindVertexArray(secondVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -180,8 +132,6 @@ int main()
 
 	glDeleteBuffers(1, &firstVBO);
 	glDeleteBuffers(1, &secondVBO);
-	glDeleteProgram(yellowProgram);
-	glDeleteProgram(blueProgram);
 
 	glfwTerminate();
 

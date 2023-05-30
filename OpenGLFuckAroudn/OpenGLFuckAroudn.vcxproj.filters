@@ -33,8 +33,19 @@
     <ClCompile Include="src\gettingStarted\helloTriangle_exercise_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shaderGettingStarted.cpp">
+    <ClCompile Include="src\gettingStarted\vertexAndFragmentConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gettingStarted\uniformShaderTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gettingStarted\moreAttributes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\gettingStarted\header\ShaderBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,25 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
-const char* vertexShaderSource =
-"#version 330 core\n"
-"layout (location = 0) in vec3 pos;\n"
-"out vec4 vertexColor;\n"
-"void main()\n"
-"{\n"
-"gl_Position = vec4(pos, 1.0);\n"
-"vertexColor = gl_Position;\n"
-"}\0";
-
-const char* fragmentShaderSource =
-"#version 330 core\n"
-"out vec4 fragmentColor;\n"
-"in vec4 vertexColor;\n"
-"void main()\n"
-"{\n"
-"fragmentColor = vertexColor;\n"
-"}\0";
+#include "headers/ShaderBuilder.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -70,65 +52,16 @@ int main()
 {
 	GLFWwindow* window = initOpenGlWithSizeAndTitle(800, 600, "shaderFuckAround");
 
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	const char* shaderPath = "C:/Users/infia/source/repos/OpenGLFuckAroudn/OpenGLFuckAroudn/src/gettingStarted/shaders";
+	char vertexPath[256];
+	strcpy_s(vertexPath, shaderPath);
+	strcat_s(vertexPath, "/vertexAndFragmentConnection.vert");
 
-	int shaderCompileSuccess;
-	char infoLog[512];
+	char fragmentPath[256];
+	strcpy_s(fragmentPath, shaderPath);
+	strcat_s(fragmentPath, "/vertexAndFragmentConnection.frag");
 
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &shaderCompileSuccess);
-	if (!shaderCompileSuccess)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "failed to compile vertex shader:" << std::endl << infoLog << std::endl;
-
-		for (int i = 0; i < 512; i++)
-		{
-			infoLog[i] = '\0';
-		}
-		glfwTerminate();
-		return -1;
-	}
-
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &shaderCompileSuccess);
-
-	if (!shaderCompileSuccess)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "failed to compile fragment shader:" << std::endl << infoLog << std::endl;
-
-		for (int i = 0; i < 512; i++)
-		{
-			infoLog[i] = '\0';
-		}
-		glfwTerminate();
-		return -1;
-	}
-
-	unsigned int shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderCompileSuccess);
-
-	if (!shaderCompileSuccess)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "failed to link shade program:" << std::endl << infoLog << std::endl;
-
-		for (int i = 0; i < 512; i++)
-		{
-			infoLog[i] = '\0';
-		}
-		glfwTerminate();
-		return -1;
-	}
+	Shader shaderProgram = Shader(vertexPath, fragmentPath);
 
 	float vertices[] =
 	{
@@ -158,7 +91,7 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shaderProgram);
+		shaderProgram.use();
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 

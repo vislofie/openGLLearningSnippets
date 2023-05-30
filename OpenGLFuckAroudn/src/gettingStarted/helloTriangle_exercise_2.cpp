@@ -1,20 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
-const char* vertexShaderSource = "#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	" gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"void main()\n"
-	"{\n"
-	"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\0";
+#include "headers/ShaderBuilder.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -58,41 +45,17 @@ int main()
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	// creating shader program
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	// creating shader
+	const char* shaderPath = "C:/Users/infia/source/repos/OpenGLFuckAroudn/OpenGLFuckAroudn/src/gettingStarted/shaders";
+	char vertexShaderPath[256];
+	strcpy_s(vertexShaderPath, shaderPath);
+	strcat_s(vertexShaderPath, "/helloTriangle.vert");
 
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	char fragmentShaderPath[256];
+	strcpy_s(fragmentShaderPath, shaderPath);
+	strcat_s(fragmentShaderPath, "/helloTriangle.frag");
 
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	int linkingSuccess;
-	char infoLog[512];
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkingSuccess);
-
-	if (!linkingSuccess)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::LINKING::" << infoLog << std::endl;
-	}
-
-	glUseProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	Shader simpleShader = Shader(vertexShaderPath, fragmentShaderPath);
 
 	// triangles
 
@@ -145,7 +108,7 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shaderProgram);
+		simpleShader.use();
 
 		glBindVertexArray(firstVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -163,7 +126,6 @@ int main()
 	
 	glDeleteBuffers(1, &firstVBO);
 	glDeleteBuffers(1, &secondVBO);
-	glDeleteProgram(shaderProgram);
 
 	return 0;
 }

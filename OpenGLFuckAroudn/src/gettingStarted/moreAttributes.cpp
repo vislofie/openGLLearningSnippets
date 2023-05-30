@@ -50,25 +50,28 @@ GLFWwindow* initOpenGlWithSizeAndTitle(int width, int height, const char* title)
 
 int main()
 {
-	GLFWwindow* window = initOpenGlWithSizeAndTitle(800, 600, "shaderFuckAround");
+	GLFWwindow* window = initOpenGlWithSizeAndTitle(800, 600, "More Attributes! Glowy LGBTQ+ triangle!");
 
 	const char* shaderPath = "C:/Users/infia/source/repos/OpenGLFuckAroudn/OpenGLFuckAroudn/src/gettingStarted/shaders";
+
 	char vertexShaderPath[256];
 	strcpy_s(vertexShaderPath, shaderPath);
-	strcat_s(vertexShaderPath, "/helloTriangle.vert");
+	strcat_s(vertexShaderPath, "/moreAttributes.vert");
 
 	char fragmentShaderPath[256];
 	strcpy_s(fragmentShaderPath, shaderPath);
-	strcat_s(fragmentShaderPath, "/uniformColor.frag");
+	strcat_s(fragmentShaderPath, "/moreAttributes.frag");
 
 	Shader shaderProgram = Shader(vertexShaderPath, fragmentShaderPath);
 
-	
-	float vertices[] =
+	shaderProgram.use();
+
+	float verticesAndColor[]
 	{
-		0.0f, 0.5f, 0.0f,
-		-0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f
+		// positions	   // colors
+		0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+	   -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
+		0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f  // top
 	};
 
 	unsigned int VAO;
@@ -80,26 +83,22 @@ int main()
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesAndColor), verticesAndColor, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	// color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 
-		float timeValue = glfwGetTime();
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		float redValue = (sin(timeValue) / 4.0f) + 0.5f;
-		float blueValue = (sin(timeValue) / 6.0f) + 0.5f;
-		
-
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		shaderProgram.use();
-		shaderProgram.setUniformVec4("ourColor", redValue, greenValue, blueValue, 1.0f);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -107,7 +106,5 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
 	return 0;
 }
-

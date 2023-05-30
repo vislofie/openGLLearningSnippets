@@ -155,12 +155,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="shaderGettingStarted.cpp" />
     <ClCompile Include="src\gettingStarted\helloEBO.cpp" />
     <ClCompile Include="src\gettingStarted\helloTriangle.cpp" />
     <ClCompile Include="src\gettingStarted\helloTriangle_exercise_1.cpp" />
     <ClCompile Include="src\gettingStarted\helloTriangle_exercise_2.cpp" />
     <ClCompile Include="src\gettingStarted\helloTriangle_exercise_3.cpp" />
+    <ClCompile Include="src\gettingStarted\moreAttributes.cpp" />
+    <ClCompile Include="src\gettingStarted\uniformShaderTriangle.cpp" />
+    <ClCompile Include="src\gettingStarted\vertexAndFragmentConnection.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\gettingStarted\header\ShaderBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
